@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Bungee+Shade|Righteous&display=swap" rel="stylesheet">
+    <style>
+        body{
+            background-color:#11225A ;
+            color:whitesmoke;
+            display:flex;
+            flex-direction:column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin: 0 auto;
+        }
+        h1{
+            font-family: 'Bungee Shade', cursive;
+            font-size:2em;
+        }
+
+        .calculator-container{
+            background-color:#253774;
+            display:flex;
+            flex-direction:column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width:500px;
+            margin: 6%;
+            padding:30px 0;
+        }
+
+        .button-container{
+            display:grid;
+            grid-template-columns:1fr 1fr 1fr 1fr;
+            width:400px;
+            
+        }
+
+        .input-field {
+            width: 400px;
+            height: 70px;
+            font-size: 2em;
+            border: 1px solid black;
+            line-height:2em;
+            margin: 1em 0 1.5em 0;
+            padding: 0 15px;
+            background-color:lightgray;
+            color:black;
+            font-family: 'Righteous', cursive;
+        }
+
+        button{
+            background-color:#5769A1;
+            color:whitesmoke;
+            margin:5px;
+            width:80px;
+            height:60px;
+            border-radius:5px;
+            font-family: 'Righteous', cursive;
+            font-size:1.5em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class = "calculator-container">
+            <h1>JS Calculator</h1>
+            <div class="input-field"></div>
+            <div class="button-container">
+                <button data-key="96" class="key">0</button>
+                <button data-key="97" class="key">1</button>
+                <button data-key="98" class="key">2</button>
+                <button data-key="99" class="key">3</button>
+                <button data-key="100" class="key">4</button>
+                <button data-key="101" class="key">5</button>
+                <button data-key="102" class="key">6</button>
+                <button data-key="103" class="key">7</button>
+                <button data-key="104" class="key">8</button>
+                <button data-key="105" class="key">9</button>
+                <button data-key="107" class="key">+</button>
+                <button data-key="109" class="key">-</button>
+                <button data-key="106" class="key">*</button>
+                <button data-key="111" class="key">/</button>
+                <button data-key="110" class="key">.</button>
+                <button data-key="189" class="key">+/-</button>
+                <button data-key="13" class="key">=</button>
+                <button data-key="67" class="key">C</button>
+                <button data-key="88" class="key">CE</button>
+            </div>    
+    </div>
+
+    <script>
+        let inputField = document.querySelector(".input-field");
+        let additionArray = [];
+        let subtractionArray = [];
+        let multiplicationArray = [];
+        let divisionArray = [];
+        let reset = 0;
+
+        function calcAddition() {
+            calcEquals();
+            if (additionArray.length === 0) {
+                additionArray.push(inputField.innerText);
+                inputField.innerText = "";
+            } else if (additionArray.length === 1) {
+                inputField.innerText = Number(additionArray[0]) + Number(inputField.innerText);
+                additionArray = [];
+            }
+        }
+
+        function calcSubtraction() {
+            calcEquals();
+            if (subtractionArray.length === 0) {
+                subtractionArray.push(inputField.innerText);
+                inputField.innerText = "";
+            } else if (subtractionArray.length === 1) {
+                inputField.innerText = Number(subtractionArray[0]) - Number(inputField.innerText);
+                subtractionArray = [];
+            }
+        }
+
+        function calcMultiplication() {
+            calcEquals();
+            if (multiplicationArray.length === 0) {
+                multiplicationArray.push(inputField.innerText);
+                inputField.innerText = "";
+            } else if (multiplicationArray.length === 1) {
+                inputField.innerText = Number(multiplicationArray[0]) * Number(inputField.innerText);
+                multiplicationArray = [];
+            }
+        }
+
+        function calcDivision() {
+            calcEquals();
+            if (divisionArray.length === 0) {
+                divisionArray.push(inputField.innerText);
+                inputField.innerText = "";
+            } else if (divisionArray.length === 1) {
+                inputField.innerText = Number(divisionArray[0]) / Number(inputField.innerText);
+                divisionArray = [];
+            }
+        }
+
+        function calcEquals() {
+            if (additionArray.length === 1) {
+                        inputField.innerText = Number(inputField.innerText) + Number(additionArray[0]);
+                        additionArray = [];
+                        reset = 1;
+            } else if (subtractionArray.length === 1) {
+                        inputField.innerText = Number(subtractionArray[0]) - Number(inputField.innerText);
+                        subtractionArray = [];
+                        reset = 1;
+            } else if (multiplicationArray.length === 1) {
+                        inputField.innerText = Number(inputField.innerText) * Number(multiplicationArray[0]);
+                        multiplicationArray = [];
+                        reset = 1;
+            } else if (divisionArray.length === 1) {
+                        inputField.innerText = Number(divisionArray[0]) / Number(inputField.innerText);
+                        divisionArray = [];
+                        reset = 1;
+            }
+        }
+        
+        function calcDecimal() {
+            let inputArray = inputField.innerText.split("");
+            //Exit function if another decimal is already present
+            for (let i = 0; i < inputArray.length; i++) {
+                if (inputArray[i] === ".") {
+                    return;
+                } 
+            }
+            inputArray.push(".");
+            inputField.innerText = inputArray.join("");
+        }
+        
+        function calcInvert() {
+            let inputArray = inputField.innerText.split("");
+            if (inputArray[0] === "0" && inputArray.length === 1) {
+                return;
+            } else if (inputArray[0] === "-"){
+                inputArray.shift();
+                inputField.innerText = inputArray.join("");
+            } else {
+                inputArray.unshift("-");
+                inputField.innerText = inputArray.join("");
+            }
+        }
+
+        function calcClear() {
+            inputField.innerText = "";
+            additionArray = [];
+            subtractionArray = [];
+            multiplicationArray = [];
+            divisionArray = [];
+            reset = 0;
+        }
+
+        function calcClearEntry() {
+            inputField.innerText = "";
+        }
+        
+        function inputOrCalculate() {
+            switch (this.innerText) {
+                case "+":
+                    calcAddition();
+                    break;
+
+                case "-":
+                    calcSubtraction();
+                    break;
+
+                case "*":
+                    calcMultiplication();
+                    break;
+
+                case "/":
+                    calcDivision();
+                    break;
+
+                case ".":
+                    calcDecimal();
+                    break;
+
+                case "+/-":
+                    calcInvert();
+                    break;
+
+                case "=":
+                    calcEquals();
+                    break;
+
+                case "C":
+                    calcClear();
+                    break;
+
+                case "CE":
+                    calcClearEntry();
+                    break;
+
+                default:
+                    if (reset === 1) {
+                        inputField.innerText = "";
+                        inputField.innerText += this.innerText;
+                        reset = 0;
+                    } else {
+                        inputField.innerText += this.innerText;
+                    }
+            }
+        }
+
+        function keyboardButton(e) {
+            const button = document.querySelector(`button[data-key="${e.keyCode}"]`);
+            if (!button) return;
+            inputOrCalculate(button);
+        }
+
+        const keys = Array.from(document.querySelectorAll(".key"));
+        keys.forEach(key => key.addEventListener("click", inputOrCalculate));
+        window.addEventListener("keydown", keyboardButton);
+
+    </script>
+</body>
+
+</html>
